@@ -63,6 +63,7 @@
         .game-container {
             display: flex;
             gap: 20px;
+            align-items: flex-start;
         }
 
         canvas {
@@ -104,6 +105,100 @@
             color: white;
             font-size: 32px;
             text-align: center;
+        }
+
+        #hearts-container {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid white;
+            border-radius: 5px;
+        }
+
+        /* Heart container styles */
+        #heart-display-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        /* Individual heart styles */
+        .heart-display {
+            width: 40px;
+            height: 40px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .heart-display::before,
+        .heart-display::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 32px;
+            border-radius: 32px 32px 0 0;
+            background-color: currentColor;
+            left: 20px;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+
+        .heart-display::after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+        .heart-full {
+            color: #ff0000;
+            filter: drop-shadow(0 0 2px rgba(255, 0, 0, 0.5));
+        }
+
+        .heart-full::before,
+        .heart-full::after {
+            background: linear-gradient(to bottom, #ff0000, #cc0000);
+        }
+
+        .heart-empty {
+            color: #666666;
+        }
+
+        .heart-empty::before,
+        .heart-empty::after {
+            background: linear-gradient(to bottom, #666666, #444444);
+        }
+
+        /* Animation for heart loss */
+        @keyframes heartLoss {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .heart-display.heart-empty {
+            animation: heartLoss 0.5s ease;
+        }
+
+        /* Shine effect for full hearts */
+        .heart-full::before {
+            position: relative;
+        }
+
+        .heart-full::before::after {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 30%;
+            height: 30%;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            filter: blur(2px);
         }
     </style>
 </head>
