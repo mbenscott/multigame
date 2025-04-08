@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Center</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #333;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+        }
+
+        /* Tab styling */
+        .tab-container {
+            width: 100%;
+            background-color: #222;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tab {
+            padding: 15px 40px;
+            font-size: 24px;
+            cursor: pointer;
+            background-color: #444;
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            background-color: #555;
+        }
+
+        .tab.active {
+            background-color: #666;
+            transform: translateY(2px);
+        }
+
+        /* Game container styling */
+        .game-section {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 100px);
+        }
+
+        .game-section.active {
+            display: flex;
+        }
+
+        .game-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        canvas {
+            border: 2px solid white;
+        }
+
+        .stats-panel {
+            color: white;
+            font-size: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+            border: 2px solid white;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .stats-item {
+            margin: 5px 0;
+        }
+
+        .next-piece-container {
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px solid white;
+        }
+
+        .next-piece-label {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #nextPieceCanvas {
+            background-color: black;
+        }
+
+        /* Coming soon message */
+        .coming-soon {
+            color: white;
+            font-size: 32px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tab Navigation -->
+    <div class="tab-container">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('blockfall')">Block Fall</div>
+            <div class="tab" onclick="switchTab('lavarun')">Lava Run</div>
+        </div>
+    </div>
+
+    <!-- Block Fall Game Section (previously Tetris) -->
+    <div id="blockfall-section" class="game-section active">
+        <div class="game-container">
+            <canvas id="gameCanvas" width="300" height="600"></canvas>
+            <div class="stats-panel">
+                <div id="score-display" class="stats-item">Score: 0</div>
+                <div id="high-score-display" class="stats-item">High Score: 0</div>
+                <div id="level-display" class="stats-item">Level: 1</div>
+                <div id="combo-display" class="stats-item">Combo: x1</div>
+                <div id="lines-display" class="stats-item">Lines: 0</div>
+                <div class="next-piece-container">
+                    <div class="next-piece-label">Next Piece:</div>
+                    <canvas id="nextPieceCanvas" width="120" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lava Run Game Section -->
+    <div id="lavarun-section" class="game-section">
+        <div class="game-container">
+            <canvas id="lavaCanvas" width="800" height="400"></canvas>
+            <div class="stats-panel">
+                <div id="lava-score-display" class="stats-item">Score: 0</div>
+                <div id="lava-high-score-display" class="stats-item">High Score: 0</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(gameType) {
+            // Update tab styling
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide game sections
+            document.querySelectorAll('.game-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`${gameType}-section`).classList.add('active');
+
+            // Initialize or resume appropriate game
+            if (gameType === 'blockfall') {
+                if (typeof resumeGame === 'function') {
+                    resumeGame();
+                }
+            } else if (gameType === 'lavarun') {
+                if (!lavaGame) {
+                    initLavaRun();
+                }
+            }
+        }
+    </script>
+    <script src="tetris.js"></script>
+    <script src="lavarun.js"></script>
+</body>
+</html> 
